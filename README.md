@@ -52,6 +52,23 @@ data in `backend/src/content/*.json` — add a unit by dropping in a new JSON fi
 - **Auth**: bcrypt password hashing, JWT in an `httpOnly` + `SameSite=Strict` cookie (no token in localStorage → no XSS token theft), constant-shape login errors + dummy-hash compare to resist user enumeration.
 - **Hardening**: helmet security headers, global + per-route rate limiting (auth endpoints are strict), zod input validation, 10 kb JSON body limit, parameterized SQL everywhere, `JWT_SECRET` required in production, backend container runs as non-root `node` user and is not exposed to the host network.
 
+## Install it as an app 📲
+
+QuantQuest is a **PWA (Progressive Web App)**: served over HTTPS (or localhost), it can be
+installed like a native app — its own icon, full-screen standalone window, no browser chrome,
+and a service worker that precaches the app shell for instant loads. Game data (grading,
+hearts, progress) always goes to the API, so nothing sensitive is cached.
+
+- **iPhone/iPad** — open the site in Safari → Share → *Add to Home Screen*
+- **Android** — Chrome shows an *Install app* prompt (or ⋮ → *Add to Home screen*)
+- **Mac/Windows** — Chrome/Edge show an install icon in the address bar
+
+To install on a phone the site must be reachable over HTTPS — deploy the docker-compose stack
+to any host (Fly.io, Railway, Render, a VPS behind Caddy/Traefik) and it works out of the box.
+
+Want a real App Store / Play Store app? The frontend is Capacitor-ready: `npx cap init` +
+`npx cap add ios android` wraps this same React build in a native shell.
+
 ## Run it
 
 ### Docker (production-style)
