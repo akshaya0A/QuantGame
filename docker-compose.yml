@@ -1,0 +1,22 @@
+services:
+  backend:
+    build: ./backend
+    environment:
+      NODE_ENV: production
+      JWT_SECRET: ${JWT_SECRET:?Set JWT_SECRET in .env (see .env.example)}
+      DB_PATH: /app/data/quantquest.db
+    volumes:
+      - quantquest-data:/app/data
+    restart: unless-stopped
+    # Not exposed to the host — only reachable through the nginx proxy.
+
+  frontend:
+    build: ./frontend
+    ports:
+      - "8080:80"
+    depends_on:
+      - backend
+    restart: unless-stopped
+
+volumes:
+  quantquest-data:

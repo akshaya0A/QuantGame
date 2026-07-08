@@ -1,0 +1,159 @@
+{
+  "id": "u6",
+  "title": "Options & Hedging",
+  "description": "Payoffs, parity and Greeks — where EV, distributions and market making all converge.",
+  "color": "#2b70c9",
+  "icon": "📐",
+  "levels": [
+    {
+      "id": "u6l1",
+      "title": "Payoffs",
+      "intro": [
+        "A CALL is the right (not obligation) to BUY at strike K; a PUT is the right to SELL at K. At expiry: call pays max(S − K, 0), put pays max(K − S, 0).",
+        "Options are bets on the distribution of S (Unit 3!) — their fair value is just E[payoff], discounted."
+      ],
+      "exercises": [
+        {
+          "id": "u6l1e1",
+          "type": "mc",
+          "prompt": "A call option gives its owner:",
+          "options": ["The obligation to buy at the strike", "The right to buy at the strike", "The right to sell at the strike", "A share of the company"],
+          "answer": 1,
+          "explanation": "Right, never obligation — that asymmetry is the whole point. You exercise only when it's profitable, so the payoff is floored at zero (and the option itself always costs something)."
+        },
+        {
+          "id": "u6l1e2",
+          "type": "numeric",
+          "prompt": "You hold a call with strike 100. At expiry the stock is at 112. Payoff per share?",
+          "answer": 12,
+          "tolerance": 0.001,
+          "explanation": "max(112 − 100, 0) = 12: buy at 100 via the option, sell at the market's 112. If the stock had expired at 95, payoff = 0 — not −5."
+        },
+        {
+          "id": "u6l1e3",
+          "type": "numeric",
+          "prompt": "You hold a put with strike 50. The stock expires at 44. Payoff per share?",
+          "answer": 6,
+          "tolerance": 0.001,
+          "explanation": "max(50 − 44, 0) = 6: buy in the market at 44, sell at 50 through the option. Puts profit when prices fall — built-in insurance."
+        },
+        {
+          "id": "u6l1e4",
+          "type": "mc",
+          "prompt": "Buy a call and sell a put, same strike and expiry. Your combined expiry payoff looks like:",
+          "options": ["A straddle", "Owning the stock (bought at the strike) — a synthetic forward", "Riskless bond", "Nothing — they cancel"],
+          "answer": 1,
+          "explanation": "Above K the call pays S−K; below K the short put costs S−K (negative). Either way you get S − K: identical to a forward at K. Replication like this is the engine of all option pricing."
+        },
+        {
+          "id": "u6l1e5",
+          "type": "mc",
+          "prompt": "Maximum possible LOSS from buying a call option?",
+          "options": ["Unlimited", "The strike price", "The premium you paid", "Zero"],
+          "answer": 2,
+          "explanation": "Worst case you let it expire worthless and lose only the premium. Selling (writing) a naked call is the opposite story: capped gain, unlimited loss."
+        }
+      ]
+    },
+    {
+      "id": "u6l2",
+      "title": "Parity & Pricing Logic",
+      "intro": [
+        "Put-call parity: C − P = S − K·e^(−rT). It's pure no-arbitrage (Unit 4) — the synthetic forward you just built must price like a real one, or free money exists.",
+        "With r = 0 it's simply C − P = S − K. Given any three of C, P, S, K you can price the fourth."
+      ],
+      "exercises": [
+        {
+          "id": "u6l2e1",
+          "type": "mc",
+          "prompt": "Put-call parity (zero rates) states:",
+          "options": ["C + P = S", "C − P = S − K", "C × P = S × K", "C = P always"],
+          "answer": 1,
+          "explanation": "Long call + short put = synthetic forward = S − K in value. If the equation breaks, an arbitrageur sells the expensive side, buys the cheap side, and locks the difference."
+        },
+        {
+          "id": "u6l2e2",
+          "type": "numeric",
+          "prompt": "Zero rates. Stock at 100, strike 100, and the put trades at 3. Fair price of the call?",
+          "answer": 3,
+          "tolerance": 0.01,
+          "explanation": "C = P + S − K = 3 + 100 − 100 = 3. At-the-money (with no rates/dividends), calls and puts are worth the same — the distribution of gains mirrors losses."
+        },
+        {
+          "id": "u6l2e3",
+          "type": "numeric",
+          "prompt": "Zero rates. Stock at 105, strike 100, put trades at 2. Fair call price?",
+          "answer": 7,
+          "tolerance": 0.01,
+          "explanation": "C = P + S − K = 2 + 105 − 100 = 7. Decompose: 5 of intrinsic value (S−K) + 2 of time value, matching the put's pure time value. Parity keeps them honest."
+        },
+        {
+          "id": "u6l2e4",
+          "type": "mc",
+          "prompt": "Volatility rises (everything else fixed). Option prices:",
+          "options": ["Calls rise, puts fall", "Both rise", "Both fall", "Unchanged — vol is noise"],
+          "answer": 1,
+          "explanation": "Payoffs are floored at zero, so a wider distribution (Unit 3) adds upside without adding downside — for calls AND puts. Options are fundamentally long volatility; that's why traders quote them in vol."
+        },
+        {
+          "id": "u6l2e5",
+          "type": "mc",
+          "prompt": "An American option (exercisable anytime) versus an otherwise identical European one (expiry only) is worth:",
+          "options": ["Less — more decisions to mess up", "The same", "At least as much — extra rights can't have negative value", "Exactly the strike more"],
+          "answer": 2,
+          "explanation": "A superset of rights can never be worth less — you can always ignore the extra right. (Fun wrinkle: for calls on non-dividend stocks, early exercise is never optimal, so they're worth exactly the same.)"
+        }
+      ]
+    },
+    {
+      "id": "u6l3",
+      "title": "Hedging & the Greeks",
+      "intro": [
+        "Greeks measure sensitivities. DELTA: how much the option price moves per $1 of stock move — and the hedge ratio. GAMMA: how fast delta itself changes. THETA: time decay.",
+        "Delta hedging is Unit 4's inventory management applied to options: stay flat the direction, trade the volatility."
+      ],
+      "exercises": [
+        {
+          "id": "u6l3e1",
+          "type": "mc",
+          "prompt": "Delta of an option measures:",
+          "options": ["Time decay per day", "Price sensitivity to a $1 move in the underlying", "Sensitivity to interest rates", "Probability of default"],
+          "answer": 1,
+          "explanation": "A 0.4-delta call gains ≈ $0.40 when the stock rises $1. Bonus intuition: delta roughly approximates the probability the option expires in the money."
+        },
+        {
+          "id": "u6l3e2",
+          "type": "numeric",
+          "prompt": "You own 100 calls (each on one share) with delta 0.4. How many shares do you SHORT to be delta-neutral?",
+          "answer": 40,
+          "tolerance": 0.001,
+          "explanation": "100 × 0.4 = 40 shares of stock-equivalent exposure; short 40 to flatten it. Now small stock moves don't hurt you — you've isolated the volatility bet."
+        },
+        {
+          "id": "u6l3e3",
+          "type": "mc",
+          "prompt": "Why must a delta-hedged position be re-hedged as the stock moves?",
+          "options": ["Broker rules", "Gamma: delta itself changes as the spot moves, unbalancing the hedge", "Theta resets delta daily", "It doesn't — one hedge is permanent"],
+          "answer": 1,
+          "explanation": "Delta is a local slope; gamma is its curvature. Long options + delta hedging means you systematically buy low / sell high as you re-hedge — that 'gamma scalping' income is what pays for theta."
+        },
+        {
+          "id": "u6l3e4",
+          "type": "numeric",
+          "prompt": "A straddle (buy call + put, both strike 100) costs $8 total. What stock price is the UPPER breakeven at expiry?",
+          "answer": 108,
+          "tolerance": 0.001,
+          "explanation": "You profit if the move exceeds the premium: breakevens at 100 ± 8 → 92 and 108. A straddle is a pure bet that realized volatility beats the vol you paid (Unit 3 meets Unit 5's sizing!)."
+        },
+        {
+          "id": "u6l3e5",
+          "type": "mc",
+          "prompt": "Theta describes why:",
+          "options": ["Options gain value as expiry nears", "A long option position bleeds value each day, all else equal", "Delta is always positive", "Volatility is constant"],
+          "answer": 1,
+          "explanation": "Less time = less chance for a big move = less optionality value. Long options pay theta to own gamma; short options collect theta but carry the tail risk. Every option book is that one trade-off. Congratulations — you've completed QuantQuest! 🎓"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,159 @@
+{
+  "id": "u3",
+  "title": "Distributions & the Bell Curve",
+  "description": "Binomial, normal, CLT — and why real markets have fatter tails than the textbook.",
+  "color": "#ce82ff",
+  "icon": "🔔",
+  "levels": [
+    {
+      "id": "u3l1",
+      "title": "Binomial World",
+      "intro": [
+        "Count successes in n independent trials with success probability p: that's Binomial(n, p). P(k successes) = C(n,k)·pᵏ·(1−p)ⁿ⁻ᵏ. Mean np, variance np(1−p).",
+        "The complement trick: P(at least one) = 1 − P(none). It turns nasty sums into one-liners."
+      ],
+      "exercises": [
+        {
+          "id": "u3l1e1",
+          "type": "numeric",
+          "prompt": "Probability of exactly 2 heads in 4 fair coin flips? (decimal)",
+          "answer": 0.375,
+          "tolerance": 0.005,
+          "explanation": "C(4,2) = 6 ways, each with probability (1/2)⁴ = 1/16, so 6/16 = 0.375. Counting from Unit 1 powering the binomial."
+        },
+        {
+          "id": "u3l1e2",
+          "type": "mc",
+          "prompt": "A strategy wins each of 100 independent trades with probability 0.3. Expected number of wins?",
+          "options": ["3", "30", "33", "70"],
+          "answer": 1,
+          "explanation": "Binomial mean = np = 100 × 0.3 = 30. Linearity of expectation again: each trade contributes 0.3 wins in expectation."
+        },
+        {
+          "id": "u3l1e3",
+          "type": "numeric",
+          "prompt": "Variance of Binomial(100, 0.25)?",
+          "answer": 18.75,
+          "tolerance": 0.01,
+          "explanation": "np(1−p) = 100 × 0.25 × 0.75 = 18.75, so SD ≈ 4.33 wins. Variance is largest when p = 0.5 — maximum uncertainty."
+        },
+        {
+          "id": "u3l1e4",
+          "type": "mc",
+          "prompt": "Which distribution models the number of attempts UNTIL your first fill (success) at an exchange?",
+          "options": ["Binomial", "Geometric", "Normal", "Uniform"],
+          "answer": 1,
+          "explanation": "Binomial counts successes in a FIXED number of trials; geometric counts trials until the FIRST success. You met its mean (1/p) in Unit 2."
+        },
+        {
+          "id": "u3l1e5",
+          "type": "numeric",
+          "prompt": "Chevalier de Méré's bet: probability of at least one 6 in four die rolls? (3 decimals)",
+          "answer": 0.518,
+          "tolerance": 0.005,
+          "explanation": "1 − (5/6)⁴ ≈ 1 − 0.482 = 0.518. Just over half — de Méré got rich on this before probability theory even existed."
+        }
+      ]
+    },
+    {
+      "id": "u3l2",
+      "title": "The Normal",
+      "intro": [
+        "The normal (Gaussian) is the bell curve: fully described by mean μ and SD σ. Rule of thumb: ~68% of mass within 1σ, ~95% within 2σ, ~99.7% within 3σ.",
+        "The Central Limit Theorem says sums/averages of many independent effects look normal — that's why it shows up everywhere. Standardize with z = (x − μ)/σ."
+      ],
+      "exercises": [
+        {
+          "id": "u3l2e1",
+          "type": "mc",
+          "prompt": "For a normal distribution, roughly what fraction of outcomes fall within 1 standard deviation of the mean?",
+          "options": ["50%", "68%", "95%", "99.7%"],
+          "answer": 1,
+          "explanation": "68 / 95 / 99.7 for 1σ / 2σ / 3σ. Burn this in — it's the fastest sanity check in all of quant work."
+        },
+        {
+          "id": "u3l2e2",
+          "type": "numeric",
+          "prompt": "IQ scores: mean 100, SD 15. What is the z-score of 130?",
+          "answer": 2,
+          "tolerance": 0.001,
+          "explanation": "z = (130 − 100)/15 = 2. Z-scores convert any normal into the standard one so a single table (or intuition) fits all."
+        },
+        {
+          "id": "u3l2e3",
+          "type": "mc",
+          "prompt": "Approximate probability a normal variable lands MORE than 2 SDs above the mean?",
+          "options": ["~10%", "~5%", "~2.3%", "~0.3%"],
+          "answer": 2,
+          "explanation": "95% is within ±2σ, so 5% is outside, split evenly: ~2.5% (2.28% exactly) in the upper tail alone."
+        },
+        {
+          "id": "u3l2e4",
+          "type": "mc",
+          "prompt": "The Central Limit Theorem says:",
+          "options": ["All data is normal", "Sums of many independent variables tend toward a normal distribution", "Variance always shrinks over time", "Averages equal medians"],
+          "answer": 1,
+          "explanation": "Whatever the individual distribution (finite variance), the sum/average of many independent copies approaches normal. Daily returns ≈ sum of many small shocks — hence the bell shape (mostly...)."
+        },
+        {
+          "id": "u3l2e5",
+          "type": "numeric",
+          "prompt": "A stock's daily return has SD 2%. Assuming independent days, what is the SD of the 9-day return, in %?",
+          "answer": 6,
+          "tolerance": 0.01,
+          "explanation": "Variances add for independent days: 9 × 4 = 36 → SD = 6%. Risk scales with √time (√9 × 2%) — the square-root-of-time rule."
+        }
+      ]
+    },
+    {
+      "id": "u3l3",
+      "title": "Tails & Reality",
+      "intro": [
+        "Here's the punchline practitioners live by: real market returns are NOT normal. Extreme moves happen far more often than the bell curve predicts — 'fat tails'.",
+        "Sigma-counting is still the common language: a '5-sigma day' means a move 5 SDs from the mean. Under normality that's near-impossible; markets deliver them anyway."
+      ],
+      "exercises": [
+        {
+          "id": "u3l3e1",
+          "type": "numeric",
+          "prompt": "A stock's daily moves have SD 1%. Today it dropped 5%. How many sigmas is that?",
+          "answer": 5,
+          "tolerance": 0.001,
+          "explanation": "z = 5%/1% = 5 sigma. Under a normal distribution that's about a 1-in-3.5-million day — once in ~14,000 trading years."
+        },
+        {
+          "id": "u3l3e2",
+          "type": "mc",
+          "prompt": "Markets produce 5-sigma days every few years, not every 14,000 years. Best conclusion?",
+          "options": ["Traders miscalculate SD", "Returns have fat tails — the normal model understates extremes", "Those days don't count", "SD is infinite"],
+          "answer": 1,
+          "explanation": "Real return distributions have excess kurtosis: more mass in the tails (and the peak) than a Gaussian. Models that assume normality die on exactly these days — see 1987, 2008, 2020."
+        },
+        {
+          "id": "u3l3e3",
+          "type": "numeric",
+          "prompt": "Daily return SD is 1.5% and there are 252 trading days. Annualized volatility in %? (1 decimal)",
+          "answer": 23.8,
+          "tolerance": 0.3,
+          "explanation": "1.5% × √252 ≈ 1.5 × 15.87 ≈ 23.8%. Same √time rule you used last level, scaled to a year."
+        },
+        {
+          "id": "u3l3e4",
+          "type": "mc",
+          "prompt": "You hold two assets with correlation +1.0. How much risk reduction does this diversification give?",
+          "options": ["A lot — always diversify", "Some — about half", "None — perfectly correlated assets are effectively one asset", "Negative — it adds risk"],
+          "answer": 2,
+          "explanation": "Diversification works through imperfect correlation. At ρ = 1 the portfolio SD is just the weighted average — no cancellation. Worse: in crashes, correlations tend to spike toward 1 exactly when you need diversification most."
+        },
+        {
+          "id": "u3l3e5",
+          "type": "mc",
+          "prompt": "Which portfolio has the LOWEST variance? Two assets, each SD 10%, weights 50/50, with correlation:",
+          "options": ["ρ = +1", "ρ = 0", "ρ = −1", "Correlation doesn't affect variance"],
+          "answer": 2,
+          "explanation": "At ρ = −1 the assets cancel perfectly: portfolio variance hits zero. This is the theoretical dream behind hedging — Unit 6 makes it concrete."
+        }
+      ]
+    }
+  ]
+}

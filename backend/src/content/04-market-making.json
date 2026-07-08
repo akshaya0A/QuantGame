@@ -1,0 +1,159 @@
+{
+  "id": "u4",
+  "title": "Market Making & Fair Value",
+  "description": "Turn EV into trading: quote two-sided markets, capture spread, dodge adverse selection.",
+  "color": "#ff9600",
+  "icon": "🏛️",
+  "levels": [
+    {
+      "id": "u4l1",
+      "title": "Bid, Ask, Edge",
+      "intro": [
+        "A market maker quotes a BID (price they'll buy at) and an ASK (price they'll sell at). The gap is the spread — their compensation for providing liquidity.",
+        "Everything anchors to FAIR VALUE — the EV of the asset (Unit 2!). Buy below fair, sell above fair: each trade is a positive-EV bet."
+      ],
+      "exercises": [
+        {
+          "id": "u4l1e1",
+          "type": "mc",
+          "prompt": "A market is quoted '99.5 bid, 100.5 ask'. If you want to buy immediately, what do you pay?",
+          "options": ["99.5", "100.0", "100.5", "Whatever you offer"],
+          "answer": 2,
+          "explanation": "Impatient buyers pay the ask; impatient sellers hit the bid. The maker pockets the spread for standing ready on both sides."
+        },
+        {
+          "id": "u4l1e2",
+          "type": "numeric",
+          "prompt": "You quote 9.5 bid / 10.5 ask around a fair value of 10. One person sells to you and another buys from you (a 'round trip'). Your profit?",
+          "answer": 1,
+          "tolerance": 0.001,
+          "explanation": "Bought at 9.5 (0.5 below fair), sold at 10.5 (0.5 above fair): +1.0 total, and you end flat with no inventory. That's the market-making machine."
+        },
+        {
+          "id": "u4l1e3",
+          "type": "mc",
+          "prompt": "A die will be rolled and the contract pays its face value in dollars. As a market maker, which quote makes sense?",
+          "options": ["3.2 bid / 3.8 ask", "3.8 bid / 4.2 ask", "2.0 bid / 2.5 ask", "3.5 bid / 3.5 ask"],
+          "answer": 0,
+          "explanation": "Fair value is E[roll] = 3.5 (Unit 2). Quote symmetrically around it: buy at 3.2 (+0.3 EV), sell at 3.8 (+0.3 EV). The other quotes either give away EV or earn nothing."
+        },
+        {
+          "id": "u4l1e4",
+          "type": "mc",
+          "prompt": "'Adverse selection' in market making means:",
+          "options": ["Picking bad employees", "The traders most eager to trade with you often know something you don't", "Choosing wrong strike prices", "Regulators selecting you for audit"],
+          "answer": 1,
+          "explanation": "Uninformed flow pays you the spread; informed flow picks you off before you update. The spread must be wide enough that winnings from the former cover losses to the latter."
+        },
+        {
+          "id": "u4l1e5",
+          "type": "mc",
+          "prompt": "Buyers keep lifting your offer over and over. Your best response?",
+          "options": ["Keep quotes fixed — a quote is a promise", "Move both quotes UP — one-sided flow signals fair value is higher than you think", "Move quotes down to attract sellers", "Quote wider on the bid only"],
+          "answer": 1,
+          "explanation": "Persistent one-sided flow is Bayesian evidence (Unit 1!) that your fair value is stale. Update it upward and re-center your quotes, or informed traders will keep eating you."
+        }
+      ]
+    },
+    {
+      "id": "u4l2",
+      "title": "Expected Value Trading",
+      "intro": [
+        "Every trade decomposes into: edge = fair value − price paid (or price received − fair value). Arbitrage is the extreme case — locking a riskless profit from inconsistent prices.",
+        "Fair value can come from a model, replication, or another market's price."
+      ],
+      "exercises": [
+        {
+          "id": "u4l2e1",
+          "type": "numeric",
+          "prompt": "A contract pays the rank of a random card: A=1, 2–10 at face, J=11, Q=12, K=13. Its fair value?",
+          "answer": 7,
+          "tolerance": 0.001,
+          "explanation": "Uniform on 1..13 → mean (1+13)/2 = 7. Symmetric distributions hand you EV instantly — look for the midpoint."
+        },
+        {
+          "id": "u4l2e2",
+          "type": "numeric",
+          "prompt": "A contract pays $10 if the next coin flip is heads, $0 otherwise. You buy it for $4. Your EV in dollars?",
+          "answer": 1,
+          "tolerance": 0.001,
+          "explanation": "Fair value = 0.5 × 10 = $5; you paid $4 → +$1 of edge. Simple, but this exact arithmetic is 90% of trading-desk decisions."
+        },
+        {
+          "id": "u4l2e3",
+          "type": "mc",
+          "prompt": "'Arbitrage' most precisely means:",
+          "options": ["Any profitable trade", "A high-EV, high-risk bet", "A riskless profit from price inconsistencies", "Trading on inside information"],
+          "answer": 2,
+          "explanation": "True arbitrage has zero risk: buy and sell the same value simultaneously at different prices. Real desks mostly chase 'statistical arbitrage' — positive EV, not riskless."
+        },
+        {
+          "id": "u4l2e4",
+          "type": "numeric",
+          "prompt": "Exchange A bids 100.2 for a stock; Exchange B asks (offers) it at 100.0. Riskless profit per share?",
+          "answer": 0.2,
+          "tolerance": 0.001,
+          "explanation": "Buy at B for 100.0, simultaneously sell at A for 100.2: +0.2 per share, zero exposure. Crossed markets like this vanish in microseconds — HFT firms exist to eat them."
+        },
+        {
+          "id": "u4l2e5",
+          "type": "mc",
+          "prompt": "Why can't you just buy 1,000,000 shares the instant you spot 0.2 of arb?",
+          "options": ["It's illegal", "Quotes have limited size, and your own buying pushes the price against you (market impact)", "Exchanges ban round numbers", "You can — free money scales infinitely"],
+          "answer": 1,
+          "explanation": "The 100.0 offer might be good for 500 shares. Beyond that you 'walk the book' to worse prices. Edge per unit shrinks as you size up — liquidity is the real constraint."
+        }
+      ]
+    },
+    {
+      "id": "u4l3",
+      "title": "Making Markets Under Fire",
+      "intro": [
+        "Trading-desk interviews love 'make me a market on X' for some unknown quantity. The game: estimate a fair value, quote around it, and update as people trade against you.",
+        "Inventory is risk: once you've bought a lot, you're long and exposed. Skew your quotes to shed it."
+      ],
+      "exercises": [
+        {
+          "id": "u4l3e1",
+          "type": "mc",
+          "prompt": "An interviewer quotes '37 bid at 39' on the number of countries in Africa (actual: 54). Best move?",
+          "options": ["Sell at 37", "Buy at 39", "Refuse to trade", "Quote 30 at 32 back"],
+          "answer": 1,
+          "explanation": "Your fair value (~54) is way above the 39 ask, so lift the offer — +15 of edge. The lesson: always form your OWN estimate before touching anyone's market."
+        },
+        {
+          "id": "u4l3e2",
+          "type": "numeric",
+          "prompt": "You sold 10 contracts at 10.5 when fair value was 10. News hits and fair value jumps to 10.8. Your mark-to-market P&L?",
+          "answer": -3,
+          "tolerance": 0.01,
+          "explanation": "Short 10 from 10.5, now worth 10.8: 10 × (10.5 − 10.8) = −3. The trade had +0.5×10 of edge at execution, but inventory risk ate it. Edge ≠ guaranteed profit."
+        },
+        {
+          "id": "u4l3e3",
+          "type": "mc",
+          "prompt": "You've accumulated a big LONG position and want to reduce inventory risk. How do you skew quotes?",
+          "options": ["Raise both bid and ask", "Lower both bid and ask", "Widen symmetrically", "Stop quoting the ask"],
+          "answer": 1,
+          "explanation": "Lowering both makes your ask more attractive (sells inventory faster) and your bid less attractive (slows further buying). Quotes are a steering wheel, not just a profit engine."
+        },
+        {
+          "id": "u4l3e4",
+          "type": "mc",
+          "prompt": "Volatility doubles. Rational market makers will:",
+          "options": ["Tighten spreads to attract volume", "Widen spreads — inventory and adverse-selection risk grew", "Keep spreads fixed", "Stop trading entirely"],
+          "answer": 1,
+          "explanation": "Higher vol means prices move more while you hold inventory and informed traders have more to know. The spread is your premium for those risks, so it must widen. Recall Var(cX)=c²Var(X)."
+        },
+        {
+          "id": "u4l3e5",
+          "type": "mc",
+          "prompt": "Why quote BOTH sides rather than only the side you like?",
+          "options": ["Rules require it", "Two-sided quotes capture the spread repeatedly while keeping inventory near zero — the maker profits from flow, not direction", "It doubles your risk on purpose", "To confuse competitors"],
+          "answer": 1,
+          "explanation": "A pure market maker monetizes the spread and stays directionally flat. Directional bets are a different business (and a harder one)."
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,159 @@
+{
+  "id": "u2",
+  "title": "Expected Value & Variance",
+  "description": "The fair price of anything, and how much it wobbles. Uses the probability you just learned.",
+  "color": "#1cb0f6",
+  "icon": "⚖️",
+  "levels": [
+    {
+      "id": "u2l1",
+      "title": "The Fair Price",
+      "intro": [
+        "Expected value is the probability-weighted average of outcomes: E[X] = Σ p·x. It's the 'fair price' of a random payoff — pay less and you profit on average.",
+        "Linearity is the superpower: E[X+Y] = E[X] + E[Y] always, even when X and Y are dependent."
+      ],
+      "exercises": [
+        {
+          "id": "u2l1e1",
+          "type": "numeric",
+          "prompt": "A game pays you the face value of one fair die roll in dollars. What is the fair price of this game?",
+          "answer": 3.5,
+          "tolerance": 0.001,
+          "explanation": "E[X] = (1+2+3+4+5+6)/6 = 3.5. Pay less than $3.50 and you make money on average; more and you lose."
+        },
+        {
+          "id": "u2l1e2",
+          "type": "mc",
+          "prompt": "A bet wins $10 with probability 0.3 and loses $4 with probability 0.7. Should a profit-maximizing quant take it (for free)?",
+          "options": ["No — you lose 70% of the time", "Yes — EV is +$0.20", "No — EV is −$0.20", "Can't tell without variance"],
+          "answer": 1,
+          "explanation": "EV = 0.3×10 − 0.7×4 = 3.0 − 2.8 = +$0.20. Losing often is fine if wins are big enough. Frequency of winning ≠ profitability."
+        },
+        {
+          "id": "u2l1e3",
+          "type": "numeric",
+          "prompt": "A lottery ticket costs $1 and pays $500 with probability 1/1000. What is the EV of buying one ticket, in dollars? (negative if a loss)",
+          "answer": -0.5,
+          "tolerance": 0.001,
+          "explanation": "E[payout] = 500/1000 = $0.50, minus the $1 cost → −$0.50. You surrender half your stake in expectation. Lotteries are a tax on ignoring EV."
+        },
+        {
+          "id": "u2l1e4",
+          "type": "mc",
+          "prompt": "True or false: E[X + Y] = E[X] + E[Y] holds even when X and Y are dependent.",
+          "options": ["True — linearity needs no independence", "False — it requires independence", "True only for identical distributions", "False — only for normal variables"],
+          "answer": 0,
+          "explanation": "Linearity of expectation holds unconditionally. This is why hard-looking problems (like expected number of matches in a shuffled deck) collapse to easy sums."
+        },
+        {
+          "id": "u2l1e5",
+          "type": "numeric",
+          "prompt": "Using linearity: what is the expected sum of two fair dice?",
+          "answer": 7,
+          "tolerance": 0.001,
+          "explanation": "E[X+Y] = E[X] + E[Y] = 3.5 + 3.5 = 7. No need to enumerate 36 outcomes — linearity did it in one line."
+        }
+      ]
+    },
+    {
+      "id": "u2l2",
+      "title": "Risk & Spread",
+      "intro": [
+        "Two bets with the same EV can feel completely different. Variance measures the spread: Var(X) = E[X²] − (E[X])². Its square root is the standard deviation, in the same units as X.",
+        "Scaling rules: Var(cX) = c²·Var(X), and Var(X+Y) = Var(X) + Var(Y) only when X and Y are uncorrelated."
+      ],
+      "exercises": [
+        {
+          "id": "u2l2e1",
+          "type": "numeric",
+          "prompt": "X is $0 or $10 with probability 1/2 each. What is Var(X)?",
+          "answer": 25,
+          "tolerance": 0.01,
+          "explanation": "E[X] = 5, E[X²] = (0+100)/2 = 50, so Var = 50 − 25 = 25 (SD = $5). Every outcome is exactly $5 from the mean."
+        },
+        {
+          "id": "u2l2e2",
+          "type": "mc",
+          "prompt": "Bet A pays ±$1 on a fair coin; Bet B pays ±$10. Same EV (zero). Which statement is right?",
+          "options": ["B has 10× the variance of A", "B has 100× the variance of A", "Same variance — same coin", "Variance is undefined for fair bets"],
+          "answer": 1,
+          "explanation": "B = 10×A, and Var(cX) = c²Var(X), so variance scales by 10² = 100. Risk grows quadratically when you size up — a core trading fact."
+        },
+        {
+          "id": "u2l2e3",
+          "type": "numeric",
+          "prompt": "Var(X) = 3. What is Var(2X)?",
+          "answer": 12,
+          "tolerance": 0.001,
+          "explanation": "Var(2X) = 2² × 3 = 12. Doubling position size quadruples variance — which is why position limits exist."
+        },
+        {
+          "id": "u2l2e4",
+          "type": "mc",
+          "prompt": "When does Var(X+Y) = Var(X) + Var(Y)?",
+          "options": ["Always, like expectation", "When X and Y are uncorrelated", "Only when X = Y", "Only for positive variables"],
+          "answer": 1,
+          "explanation": "In general Var(X+Y) = Var(X) + Var(Y) + 2Cov(X,Y). The covariance term vanishes when they're uncorrelated. Correlation is what makes portfolio risk interesting."
+        },
+        {
+          "id": "u2l2e5",
+          "type": "numeric",
+          "prompt": "What is the variance of a single fair die roll? (3 decimals ok)",
+          "answer": 2.917,
+          "tolerance": 0.01,
+          "explanation": "E[X²] = (1+4+9+16+25+36)/6 = 91/6 ≈ 15.167; Var = 15.167 − 3.5² = 15.167 − 12.25 ≈ 2.917. SD ≈ 1.71."
+        }
+      ]
+    },
+    {
+      "id": "u2l3",
+      "title": "Games & Edges",
+      "intro": [
+        "Now combine EV with waiting times. For a geometric process (repeat until success, probability p per trial), the expected number of trials is 1/p.",
+        "These 'expected time' puzzles are quant-interview classics — the trick is setting up an equation where the expectation refers to itself."
+      ],
+      "exercises": [
+        {
+          "id": "u2l3e1",
+          "type": "numeric",
+          "prompt": "You get paid the SQUARE of a die roll in dollars. What is the fair price? (2 decimals)",
+          "answer": 15.17,
+          "tolerance": 0.05,
+          "explanation": "E[X²] = 91/6 ≈ $15.17 — NOT 3.5² = 12.25. E[X²] ≠ (E[X])²; the gap between them is exactly the variance (2.92)."
+        },
+        {
+          "id": "u2l3e2",
+          "type": "numeric",
+          "prompt": "Rolling a fair die repeatedly, how many rolls do you expect to need to see your first 6?",
+          "answer": 6,
+          "tolerance": 0.001,
+          "explanation": "Geometric with p = 1/6 → E = 1/p = 6. Elegant self-referential proof: E = 1 + (5/6)E, solve for E."
+        },
+        {
+          "id": "u2l3e3",
+          "type": "mc",
+          "prompt": "Expected number of fair-coin flips to see the pattern HH (two heads in a row)?",
+          "options": ["4", "5", "6", "8"],
+          "answer": 2,
+          "explanation": "Let E = flips to HH. From scratch: E = 1 + ½E (tails, restart) + ½[1 + ½·0 + ½E] (head, then resolve). Solving gives E = 6. Fun fact: HT only takes 4 — patterns differ!"
+        },
+        {
+          "id": "u2l3e4",
+          "type": "mc",
+          "prompt": "How many die rolls on average to see EVERY face at least once (coupon collector)?",
+          "options": ["6", "10.5", "14.7", "21"],
+          "answer": 2,
+          "explanation": "Sum of geometric waits: 6×(1/6 + 1/5 + 1/4 + 1/3 + 1/2 + 1) = 6 × 2.45 = 14.7. Each new face is harder to find than the last."
+        },
+        {
+          "id": "u2l3e5",
+          "type": "mc",
+          "prompt": "Offer A: a sure $50. Offer B: a coin flip for $100 or $0. You'll face this choice 1,000 independent times. A risk-neutral quant thinks:",
+          "options": ["Always A — never gamble", "Always B — gambling wins long-run", "Equal EV; over 1,000 trials B's average converges near $50 anyway, so either is fine", "B, because variance adds value"],
+          "answer": 2,
+          "explanation": "Both have EV $50. Repetition shrinks B's per-trial risk (SD of the average falls like 1/√n), so for small repeated stakes EV is all that matters. For one huge bet, risk aversion kicks in — that's Unit 5."
+        }
+      ]
+    }
+  ]
+}
